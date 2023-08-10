@@ -142,9 +142,9 @@ static bool cell_null_str(const CellRaw& cell)
 	return s && (s->empty() || *s == "NULL" || *s == "null");
 }
 
-Parser* Parser::get_parser(const std::string& filename)
+Parser* Parser::get_parser(const std::string& filename, ClientContext &context)
 {
-	return ParserImpl::get_parser_from_reader(std::make_shared<FileReader>(filename));
+	return ParserImpl::get_parser_from_reader(std::make_shared<FileReader>(filename, context));
 }
 
 template <class Parser>

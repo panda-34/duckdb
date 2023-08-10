@@ -10,8 +10,9 @@ namespace duckdb {
 namespace {
 
 struct IngestBindData : public TableFunctionData {
-	explicit IngestBindData(const string &file_name)
-	    : parser(Parser::get_parser(file_name)) {
+	explicit IngestBindData(const string &file_name, ClientContext &context)
+	    : parser(Parser::get_parser(file_name, context)) {
+		parser->select_file(0);
 	}
 
 	void BindSchema(std::vector<LogicalType> &return_types, std::vector<string> &names) {
@@ -31,7 +32,7 @@ static unique_ptr<FunctionData> IngestBind(ClientContext &context, TableFunction
 		throw PermissionException("Scanning external files is disabled through configuration");
 	}
 	const string &file_name = StringValue::Get(input.inputs[0]);
-	auto result = make_uniq<IngestBindData>(file_name);
+	auto result = make_uniq<IngestBindData>(file_name, context);
 	result->BindSchema(return_types, names);
 	return std::move(result);
 }

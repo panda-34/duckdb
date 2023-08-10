@@ -136,7 +136,7 @@ public:
 class Parser
 {
 public:
-	static Parser* get_parser(const std::string& filename);
+	static Parser* get_parser(const std::string& filename, ClientContext &context);
 	virtual ~Parser() = default;
 	virtual bool infer_schema() = 0;
 	virtual Schema* get_schema() = 0; // returns pointer to instance member, do not delete
